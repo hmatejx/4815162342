@@ -51,6 +51,7 @@ class Screen:
         # set initial cursor location
         self.cursorx = 0
         self.cursory = 0
+        self.blockcursor = 0
 
         # initialize the CRT buffers (two for blending effect)
         self.crt0 = pygame.Surface([self.CRT_W, self.CRT_H], pygame.SRCALPHA, 32).convert_alpha()
@@ -71,8 +72,8 @@ class Screen:
                         "beep":   pygame.mixer.Sound("snd/beep.mp3"),
                         "dharma": pygame.mixer.Sound("snd/dharma.mp3"),
                         "timerr": pygame.mixer.Sound("snd/timer_reset.mp3") }
-        self.SOUND("beep", 0.2)
-        self.SOUND("dharma", 0.2)
+        self.SOUND("beep", 0.5)
+        self.SOUND("dharma", 0.5)
 
 
     def PUTC(self, char):
@@ -98,7 +99,7 @@ class Screen:
                 pygame.quit()
                 sys.exit()
             if event.type == KEYDOWN:
-                self.SOUND("click", 0.2)
+                self.SOUND("click", 0.5)
                 return event
         return None
 
@@ -121,10 +122,23 @@ class Screen:
                 if char == "RETURN":
                     return ''
                 elif char == "BACKSPACE":
-                    if self.cursorx > 0:
-                        self.PUTC(None)
-                        self.cursorx -= 2
-                        return -1
+                    if self.cursory > self.blockcursor[1]:
+                        if self.cursorx > 0:
+                            self.PUTC(None)
+                            self.cursorx -= 2
+                        else:
+                            self.PUTC(None)
+                            self.cursorx = 39
+                            self.cursory -= 1                            
+                    else:
+                        if self.cursorx > self.blockcursor[0]:
+                            self.PUTC(None)
+                            if self.cursorx == 0:
+                                self.cursorx = 38
+                                self.cursory -= 1
+                            else:
+                                self.cursorx -= 2
+                    return -1
                 elif len(char) == 1:
                     self.PUTC(char)
                     self.UPDATE()
@@ -135,10 +149,15 @@ class Screen:
                 time = newtime
             self.PUTC(['\u2588', None][i % 2])
             self.UPDATE()
-            self.cursorx -= 1
+            if self.cursorx > 0:
+                self.cursorx -= 1
+            else:
+                self.cursorx = 39
+                self.cursory -= 1
 
 
     def INPUT(self):
+        self.blockcursor = (self.cursorx, self.cursory)
         string = ""
         while True:
             char = self.GETC()
@@ -148,6 +167,8 @@ class Screen:
                 string = string[0:(len(string) - 1)]
             else:
                 string += char
+        self.blockcursor = (0, 0)
+        print(string)
         return string
 
 
@@ -199,7 +220,7 @@ class Screen:
 
 
     def BEEP(self):
-        self.SOUND("beep", 0.2)
+        self.SOUND("beep", 0.5)
 
 
     def SOUND(self, snd, volume):

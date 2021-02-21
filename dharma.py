@@ -139,7 +139,24 @@ def RadzinskiLoading():
 
 
 def JacobsList():
-    return
+    S.HOME()
+    S.GOTOXY(2, 2)
+    S.PRINT(' 4 – Locke')
+    S.GOTOXY(2, 4)
+    S.PRINT(' 8 – Reyes')
+    S.GOTOXY(2, 6)
+    S.PRINT('15 – Ford')
+    S.GOTOXY(2, 8)
+    S.PRINT('16 – Jarrah')
+    S.GOTOXY(2, 10)
+    S.PRINT('23 – Shephard')
+    S.GOTOXY(2, 12)
+    S.PRINT('42 – Kwon')
+    S.GOTOXY(2, 20)
+    S.PRINT('PRESS ANY KEY TO CONTINUE...')
+    while True:
+        char = S.GETC()
+        break
 
 
 def SystemFailure():
@@ -164,7 +181,7 @@ def ButtonLoop():
     while True:
         S.HOME()
         S.PRINT(">:")
-        string = S.INPUT()
+        string = S.INPUT().rstrip()
         if string not in commands:
             break
         commands[string]()

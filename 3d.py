@@ -50,7 +50,7 @@ void main() {
   vec2 center = vec2(0.5, 0.5);
   vec2 off_center = v_text - center;
 
-  off_center *= 1.0 ;//+ 0.5 * pow(abs(off_center.yx), vec2(2.5));
+  off_center *= 1.0 + 0.5 * pow(abs(off_center.yx), vec2(2.5));
 
   vec2 v_text2 = center+off_center;
 
