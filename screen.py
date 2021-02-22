@@ -4,6 +4,7 @@ Emulates the Apple III monitor
 
 import sys
 from math import pi, cos, sin
+import random
 import pygame
 from pygame.locals import *
 
@@ -64,8 +65,8 @@ class Screen:
             col = 255*(1 - abs(sin(pi*f))**2.5)
             pygame.draw.line(self.scanlines, (0, 0, 0, col), (0, i), (self.CRT_W, i))
 
-        # use internal clock for refresh
-        self.Clock = pygame.time.Clock()
+        # use internal clock for controling refresh rate
+        self.clock = pygame.time.Clock()
 
         # load sound effects
         self.sounds = { "click":  pygame.mixer.Sound("snd/click.mp3"),
@@ -74,33 +75,29 @@ class Screen:
                         "timerr": pygame.mixer.Sound("snd/timer_reset.mp3") }
         self.SOUND("beep", 0.5)
         self.SOUND("dharma", 0.5)
-
-
-    def PUTC(self, char):
-        x0 = self.cursorx*21
-        y0 = self.cursory*24
-        pygame.draw.rect(self.crt1, (0, 0, 0), (x0, y0, 21, 24))
-        if char is not None:
-            if self.font.size(char)[0] > 0:
-                text = self.font.render(char, 1, self.color)
-                self.crt1.blit(text, (x0, y0))
-        self.cursorx += 1
-        if self.cursorx >= 40:
-            self.cursorx = 0
-            self.cursory += 1
-        if self.cursory >= 24:
-            self.crt1.blit(self.crt1, (0, -24))
-            self.cursory = 23
+        
+        # swan timer
+        self.interval = 108*60*1
+        self.warn1 = 4*60*1
+        self.warn2 = 1*60*1
+        self.reset_at = 0
+        pygame.time.set_timer(pygame.USEREVENT, int(random.uniform(0, self.interval)))     
 
 
     def _process_events(self):
         for event in pygame.event.get():
+            # quit request
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                 pygame.quit()
                 sys.exit()
+            # key pressed
             if event.type == KEYDOWN:
                 self.SOUND("click", 0.5)
                 return event
+            # swan timer alarm sequence
+            if event.type == pygame.USEREVENT:
+                print("Swan alarm sequence started!")
+                pygame.time.set_timer(pygame.USEREVENT, self.interval - self.warn1)
         return None
 
 
@@ -108,6 +105,24 @@ class Screen:
         while True:
             if self._process_events() is not None:
                 break
+
+
+    def PUTC(self, char, fwd=True):
+        x0 = self.cursorx*21
+        y0 = self.cursory*24
+        pygame.draw.rect(self.crt1, (0, 0, 0), (x0, y0, 21, 24))
+        if char is not None:
+            if self.font.size(char)[0] > 0:
+                text = self.font.render(char, 1, self.color)
+                self.crt1.blit(text, (x0, y0))
+        if fwd:
+            self.cursorx += 1
+            if self.cursorx >= 40:
+                self.cursorx = 0
+                self.cursory += 1
+            if self.cursory >= 24:
+                self.crt1.blit(self.crt1, (0, -24))
+                self.cursory = 23
 
 
     def GETC(self):
@@ -122,22 +137,13 @@ class Screen:
                 if char == "RETURN":
                     return ''
                 elif char == "BACKSPACE":
-                    if self.cursory > self.blockcursor[1]:
+                    if self.cursory > self.blockcursor[1] or self.cursorx > self.blockcursor[0]:
+                        self.PUTC(None, fwd=False)
                         if self.cursorx > 0:
-                            self.PUTC(None)
-                            self.cursorx -= 2
+                            self.cursorx -= 1
                         else:
-                            self.PUTC(None)
                             self.cursorx = 39
                             self.cursory -= 1                            
-                    else:
-                        if self.cursorx > self.blockcursor[0]:
-                            self.PUTC(None)
-                            if self.cursorx == 0:
-                                self.cursorx = 38
-                                self.cursory -= 1
-                            else:
-                                self.cursorx -= 2
                     return -1
                 elif len(char) == 1:
                     self.PUTC(char)
@@ -208,9 +214,10 @@ class Screen:
         self.crt0.blit(self.crt1, (0, 0), special_flags=pygame.BLEND_RGBA_MAX)
         self.crt0.blit(self.scanlines, (0, 0))
         self.screen.blit(self.crt0, (self.CRT_X, self.CRT_Y))
-        self.screen.blit(self._fps(), (10, 0))
+        #self.screen.blit(self._fps(), (10, 0))
+        self.screen.blit(self._countdown(), (10, 0))
         pygame.display.flip()
-        self.Clock.tick(self.REFRESH)
+        self.clock.tick(self.REFRESH)
 
 
     def PAUSE(self, rep):
@@ -231,6 +238,12 @@ class Screen:
 
 
     def _fps(self):
-	    fps = str(int(self.Clock.get_fps()))
+	    fps = str(int(self.clock.get_fps()))
 	    fps_text = self.font2.render(fps, 1, pygame.Color("coral"))
 	    return fps_text
+
+
+    def _countdown(self):
+        remaining = str(int(self.interval + self.reset_at - pygame.time.get_ticks() / 1000))
+        countdown_text = self.font2.render(remaining, 1, pygame.Color("coral"))
+        return countdown_text

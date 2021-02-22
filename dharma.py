@@ -169,7 +169,7 @@ def SystemFailure():
 
 def TimerReset():
     S.BEEP()
-    S.SOUND("timerr", 0.6)
+    S.SOUND("timerr", 1)
 
 
 def ButtonLoop():
@@ -181,7 +181,7 @@ def ButtonLoop():
     while True:
         S.HOME()
         S.PRINT(">:")
-        string = S.INPUT().rstrip()
+        string = S.INPUT().strip()
         if string not in commands:
             break
         commands[string]()
