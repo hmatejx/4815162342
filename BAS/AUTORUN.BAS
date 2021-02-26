@@ -1,0 +1,23 @@
+10 HOME()
+20 REM =====================
+21 REM Display the Swan logo
+22 REM =====================
+25 REM fname, x, y, scale (opt), speed (opt)
+30 IMG "IMG/SWANLOGO.png", 228, 36, 3, 3
+40 HTAB 12 : VTAB 20
+50 PRINT "STATION 3: THE SWAN";
+60 HTAB 2: VTAB 22
+70 PRINT "LOAD RADZINSKI.001 (Y/N)? ";
+80 GET K
+100 IF K = "Y" THEN 140
+110 IF K = "N" THEN 130
+120 GOTO 60
+130 RET = 0 : STOP
+140 RET = 1 : HOME
+150 PRINT "LOADING";
+160 FOR I = 0 TO 59
+170 PRINT ".";
+180 PAUSE 167
+190 NEXT I
+200 HOME
+210 PAUSE 1000
