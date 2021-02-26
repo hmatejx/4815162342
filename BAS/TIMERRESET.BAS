@@ -1,3 +1,3 @@
 10 PRINT CHR$(7)
-19 REM fname, volume (opt)
+19 REM SND fname, volume (opt)
 20 SND "SND/TIMERRESET.MP3", 1
