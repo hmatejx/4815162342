@@ -1,6 +1,5 @@
 #! /usr/bin/python
 
-
 from pybasic.basictoken import BASICToken as Token
 from pybasic.basicparser import BASICParser
 from pybasic.lexer import Lexer
@@ -9,24 +8,24 @@ from apple2.computer import Computer
 from sys import maxsize
 
 
-def main():
+lexer = None
+computer = None
+parser = None
 
-    lexer = Lexer()
-    computer = Computer()
-    parser = BASICParser(_print = computer.print,
-                         _input = computer.input,
-                         _getc = computer.getc,
-                         _clrscr = computer.clrscr,
-                         _htab = computer.htab,
-                         _vtab = computer.vtab,
-                         _img = computer.img,
-                         _snd = computer.snd,
-                         _pause = computer.pause)
+
+def Interpreter():
+    global lexer, computer, parser
+    if lexer == None: lexer = Lexer()
+    if computer == None: computer = Computer()
+    if parser == None: parser = BASICParser(computer)
     program = Program(parser)
+
+    computer.clrscr()
+    computer.htab(1)
+    computer.vtab(24)
 
     # Continuously accept user input and act on it until
     # the user enters 'EXIT'
-    computer.clrscr()
     while True:
         computer.print(']', end='')
         stmt = computer.input().strip()
@@ -142,4 +141,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    Interpreter()
