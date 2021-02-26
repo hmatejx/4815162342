@@ -1,4 +1,4 @@
-10 HOME()
+10 HOME
 20 REM =====================
 21 REM Display the Swan logo
 22 REM =====================
