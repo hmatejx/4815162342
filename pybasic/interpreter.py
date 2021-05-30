@@ -27,6 +27,7 @@ class Interpreter():
     def interactive(self):
         """Run an interactive session with the interpreter
         """
+        self.__program.delete()
         self.__computer.clrscr()
         self.__computer.htab(1)
         self.__computer.vtab(24)
@@ -162,7 +163,7 @@ class Interpreter():
         :return: Returns the 'exit status' held in variable RET
         """
         if self.__program is not None:
-            self.__program.execute()
+            return self.__program.execute()
 
 
 if __name__ == '__main__':

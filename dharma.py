@@ -11,18 +11,13 @@ computer = AppleII()
 interpreter = Interpreter(computer)
 
 
-def quit():
-    pygame.quit()
-    sys.exit()
-
-
 def ButtonLoop():
     # Dictionary of implemented commands
     commands = {
         "4 8 15 16 23 42": "DHARMA/TIMERRESET.BAS",
         "INFO": "DHARMA/STATIONINFO.BAS",
         "JACOB": "DHARMA/JACOB.BAS",
-        "BASIC": Interpreter.interactive
+        "BASIC": interpreter.interactive
     }
     while True:
         # Get user input
