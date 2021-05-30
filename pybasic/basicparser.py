@@ -19,8 +19,6 @@ from .basictoken import BASICToken as Token
 from .flowsignal import FlowSignal
 import math
 import random
-import msvcrt
-import time
 import itertools
 import os
 
@@ -68,34 +66,25 @@ class BASICArray:
 """Implements a BASIC parser that parses a single
 statement when supplied.
 
+Needs a Computer for such as pybasic.ComputerInterface for interaction.
+
 """
 class BASICParser:
 
-    def __init__(self, computer=None):
+    def __init__(self, computer):
         # Reset the class
         self.__reset()
 
-        # Define the interaction functions
-        if computer == None:
-            self.__print = print
-            self.__input = input
-            self.__getc = msvcrt.getch
-            self.__clrscr = lambda: None
-            self.__htab = lambda: None
-            self.__vtab = lambda: None
-            self.__img = lambda: None
-            self.__snd = lambda:None
-            self.__pause = time.sleep
-        else:
-            self.__print = computer.print
-            self.__input = computer.input
-            self.__getc = computer.getc
-            self.__clrscr = computer.clrscr
-            self.__htab = computer.htab
-            self.__vtab = computer.vtab
-            self.__img = computer.img
-            self.__snd = computer.snd
-            self.__pause = computer.pause
+        # Link the computer interaction functions
+        self.__print = computer.print
+        self.__input = computer.input
+        self.__getc = computer.getc
+        self.__clrscr = computer.clrscr
+        self.__htab = computer.htab
+        self.__vtab = computer.vtab
+        self.__img = computer.img
+        self.__snd = computer.snd
+        self.__pause = computer.pause
 
 
     def __reset(self):
@@ -303,17 +292,18 @@ class BASICParser:
         # Check there are items to print
         if not self.__tokenindex >= len(self.__tokenlist):
             self.__logexpr()
-            self.__print(str(self.__operand_stack.pop()), end=False, flush=False)
+            self.__print(str(self.__operand_stack.pop()), end='', flush=False)
 
             while self.__token.category == Token.COMMA:
                 self.__advance()
                 self.__logexpr()
-                self.__print(str(self.__operand_stack.pop()), end=False, flush=False)
+                self.__print(str(self.__operand_stack.pop()), end='', flush=False)
 
         # Update the screen by flushing
         # Skip final newline if optional semicolon
         self.__advance()
-        self.__print(end=self.__token.category != Token.SEMICOLON, flush=True)
+        endc = '\n' if self.__token.category != Token.SEMICOLON else ''
+        self.__print(end=endc, flush=True)
 
 
     def __letstmt(self):

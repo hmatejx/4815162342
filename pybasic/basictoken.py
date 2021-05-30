@@ -26,9 +26,6 @@ lexeme      Token in string form
 """
 
 
-from pygame.constants import K_POWER
-
-
 class BASICToken:
 
         """BASICToken categories"""

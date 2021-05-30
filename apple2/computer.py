@@ -7,6 +7,7 @@ import pygame
 import os
 from math import pi, sin
 from pygame.locals import *
+from sys import maxsize
 
 
 __all__ = ['Computer']
@@ -39,12 +40,12 @@ class Computer:
         pygame.display.set_caption("Scanlines")
         self.screen = pygame.display.set_mode((self.MON_IMG_W, self.MON_IMG_H))
         pygame.display.set_caption("DHARMA Swan Computer")
+        dir_path = os.path.dirname(os.path.abspath(__file__))
 
         # load background image
-        self.background = pygame.image.load("IMG/APPLEIII.PNG").convert_alpha()
+        self.background = pygame.image.load(os.path.join(dir_path, "img", "APPLEIII.PNG")).convert_alpha()
 
         # load Apple II fonts
-        dir_path = os.path.dirname(os.path.abspath(__file__))
         self.font = pygame.font.Font(os.path.join(dir_path, "font", "PrintChar21.ttf"), 24)
         self.font2 = pygame.font.SysFont("Arial", 18)
 
@@ -71,10 +72,8 @@ class Computer:
             pygame.draw.line(self.scanlines, (0, 0, 0, col), (0, i), (self.CRT_W, i))
 
         # load sound effects
-        self.sounds = { "click":  pygame.mixer.Sound("SND/CLICK.MP3"),
-                        "beep":   pygame.mixer.Sound("SND/BEEP.MP3"),
-                        "dharma": pygame.mixer.Sound("SND/DHARMA.MP3"),
-                        "timerr": pygame.mixer.Sound("SND/TIMERRESET.MP3") }
+        self.sounds = { "click":  pygame.mixer.Sound(os.path.join(dir_path, "snd", "CLICK.MP3")),
+                        "beep":   pygame.mixer.Sound(os.path.join(dir_path, "snd", "BEEP.MP3")) }
 
 
     def __process_events(self):
@@ -311,7 +310,7 @@ class Computer:
 
     def pause(self, delay):
         if delay < 0:
-            rep = sys.maxsize
+            rep = maxsize
         else:
             rep = int(delay * self.REFRESH)
         for i in range(0, rep):

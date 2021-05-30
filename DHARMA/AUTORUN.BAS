@@ -2,8 +2,10 @@
 20 REM =====================
 21 REM Display the Swan logo
 22 REM =====================
-25 REM IMG fname, x, y, scale (opt), speed (opt)
-30 IMG "IMG/SWANLOGO.png", 228, 36, 3, 3
+24 REM SND fname, volume
+26 SND "DHARMA/DHARMA.MP3", 1
+28 REM IMG fname, x, y, scale (opt), speed (opt)
+30 IMG "DHARMA/SWANLOGO.PNG", 228, 36, 3, 3
 40 HTAB 12 : VTAB 20
 50 PRINT "STATION 3: THE SWAN";
 60 HTAB 2: VTAB 22

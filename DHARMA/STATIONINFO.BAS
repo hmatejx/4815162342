@@ -2,7 +2,7 @@
 20 REM ====================
 21 REM Display the swan map
 22 REM ====================
-30 IMG "IMG/SWANLAYOUT.PNG", 4, 0, 2.4, 9
+30 IMG "DHARMA/SWANLAYOUT.PNG", 4, 0, 2.4, 9
 50 HTAB 6.2: VTAB 3: PRINT "B";
 60 HTAB 11: VTAB 2.5: PRINT "S";
 70 HTAB 17.7: VTAB 6.33: PRINT "D";

@@ -1,17 +1,14 @@
 #! /usr/bin/python
 
-from pybasic.basicparser import BASICParser
-from pybasic.lexer import Lexer
-from pybasic.program import Program
-from apple2.computer import Computer
-from interpreter import Interpreter
+from pybasic.interpreter import Interpreter
+from apple2.computer import Computer as AppleII
 import pygame
 import sys
 
 
-computer = Computer()
-parser = BASICParser(computer)
-program = Program(parser)
+# Link the Apple II simulator with the pybasic interpreter
+computer = AppleII()
+interpreter = Interpreter(computer)
 
 
 def quit():
@@ -22,10 +19,10 @@ def quit():
 def ButtonLoop():
     # Dictionary of implemented commands
     commands = {
-        "4 8 15 16 23 42": "BAS/TIMERRESET.BAS",
-        "INFO": "BAS/STATIONINFO.BAS",
-        "JACOB": "BAS/JACOB.BAS",
-        "BASIC": Interpreter
+        "4 8 15 16 23 42": "DHARMA/TIMERRESET.BAS",
+        "INFO": "DHARMA/STATIONINFO.BAS",
+        "JACOB": "DHARMA/JACOB.BAS",
+        "BASIC": Interpreter.interactive
     }
     while True:
         # Get user input
@@ -40,13 +37,13 @@ def ButtonLoop():
                 computer.pause(1)
                 target()
                 computer.pause(1)
-            # run a BASIC program
+            # load and execute a BASIC program
             elif isinstance(target, str) and target.find(".BAS"):
-                program.load(target)
-                program.execute()
+                interpreter.load(target)
+                interpreter.execute()
 
 
 if __name__ == "__main__":
-    program.load("BAS/AUTORUN.BAS")
-    if program.execute() == 1:
+    interpreter.load("DHARMA/AUTORUN.BAS")
+    if interpreter.execute() == 1:
         ButtonLoop()
