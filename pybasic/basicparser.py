@@ -66,7 +66,7 @@ class BASICArray:
 """Implements a BASIC parser that parses a single
 statement when supplied.
 
-Needs a Computer for such as pybasic.ComputerInterface for interaction.
+Needs a Computer such as TerminalComputer for interaction.
 
 """
 class BASICParser:
