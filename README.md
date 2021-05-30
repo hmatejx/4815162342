@@ -1,6 +1,6 @@
-# 4 8 15 16 23 42
+# Now it's your turn to save the world
 
-![image](https://user-images.githubusercontent.com/28361938/120106351-f49cc980-c15c-11eb-9c14-fffa14cad827.png)
+![image](showcase.webp)
 
 ## Usage
 
@@ -9,6 +9,4 @@ Clone the repo, navigate to the base folder, and execute the following in the te
 python dharma.py
 ```
 
-## Dependencies
-
-You need to have a pygame >= 2.0.1 installed.
+You need Python >= 3.9 and pygame >= 2.0.1 installed (I did not test other versions).
