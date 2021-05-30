@@ -1,16 +1,16 @@
 # Modified BASIC Interpreter
 
-**Disclaimer: The BASIC interpreter included in this project is mostly not my work**.
+**Disclaimer: The BASIC interpreter included in this project is mostly not my work**. Specificaly, I cloned the code of [this commit](https://github.com/richpl/PyBasic/commit/45207e8b5b5ed689b2f487794cbb5ff1ab12320e).
 
-This version is a heavily modified/customized version of the interpreter authored by @richpl: https://github.com/richpl/PyBasic. Specificaly, I cloned the code [this commit](https://github.com/richpl/PyBasic/commit/45207e8b5b5ed689b2f487794cbb5ff1ab12320e).
+This version is a heavily modified/customized version of [the PyBasic interpreter](https://github.com/richpl/PyBasic) by [@richpl](https://github.com/richpl). The relevant modifications are listed in the next section.
 
-The core BASIC dialect documentation can be found at the [original source](https://github.com/richpl/PyBasic/blob/4742271bc17ae16bf38ec911e2c69cb69bd9dbf4/README.md). This version includes some enhancements that are listed in the next section.
+The documentation of the core BASIC dialect can be found at the [original source](https://github.com/richpl/PyBasic/blob/4742271bc17ae16bf38ec911e2c69cb69bd9dbf4/README.md). 
 
 ## Modifications to the original interpreter
 
-I inserted function hooks into all input / output calls, e.g. print, input, getch, etc. so that the interpreter can interact with a computer simulator, such as the Appple II simulator implemented in this project.
+I inserted the respective hooks into all I/O calls, e.g. print, input, getch, etc. so that the interpreter can interact with a computer simulator, such as the Appple II simulator implemented in this project. I have also slightly refactored the code to enable the necessary interfacing.
 
-In addition I significanly enriched the BASIC functionality and have  implemented serveral BASIC statements.
+In addition, I enriched the BASIC dialect with serveral additional BASIC statements.
 
 ### Playing sound files
 
